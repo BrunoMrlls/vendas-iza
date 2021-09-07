@@ -1,5 +1,6 @@
 package br.com.iza.domain;
 
+import br.com.iza.controller.dto.ProductOutputDTO;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,7 +14,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Entity
-public class Product {
+public class Product extends BaseDomain {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
@@ -25,5 +26,13 @@ public class Product {
 
     public Product(String name) {
         this.name = name;
+    }
+
+    public ProductOutputDTO toOutputDTO() {
+        return ProductOutputDTO.builder()
+                .identifier(getIdentifier())
+                .name(getName())
+                .created_at(getCreated_at())
+            .build();
     }
 }

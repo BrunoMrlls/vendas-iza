@@ -8,8 +8,10 @@ import static org.mockito.Mockito.when;
 
 import br.com.iza.domain.Product;
 import br.com.iza.repository.ProductRepository;
+import java.util.UUID;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -30,7 +32,7 @@ public class ProductServiceTest {
         underTest = new ProductService(repo);
     }
 
-    @Test
+    @Test @DisplayName("Deve testar inserção de produto")
     void productInsertTest() {
         //given
         String productName = "TV 29'";
@@ -47,36 +49,36 @@ public class ProductServiceTest {
         assertEquals(capturedProduct.getName(), productName);
     }
 
-    @Test
-    void productFindByNameTest() {
+    @Test @DisplayName("Deve testar a procura do produto")
+    void itShouldFindProductByIdentifierTest() {
         //given
-        String productName = "Sofá 3 lugares";
+        String identifier = UUID.randomUUID().toString();
+        String productName = "Macbook air";
 
         Product expeted = new Product(productName);
         //when
-        when(repo.findByName(productName)).thenReturn(expeted);
+        when(repo.findProductByIdentifier(identifier)).thenReturn(expeted);
 
         //then
-        Product returned = underTest.findByName(productName);
+        Product returned = underTest.findBy(identifier);
 
         assertEquals(expeted, returned);
     }
 
-    @Test
+    @Test @DisplayName("Deve testar erro de campo obrigatório")
     void itShouldThrowProductInsertIllegalArgumentErrorTest() {
-        Assertions.assertThatThrownBy(
-            () -> underTest.insert(null))
+        Assertions.assertThatThrownBy(() -> underTest.insert(null))
             .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("Parâmetro nome do produto é obrigatório.");
+            .hasMessageContaining("Property name is required.");
 
         verify(repo, never()).save(any());
     }
 
-    @Test
-    void list() {
-        //when
-        underTest.list();
-        //then
-        verify(repo).findAll();
+    @Test @DisplayName("Deve testar erro de produto não encontrado")
+    void itShouldThrowProductNotFoundExceptionTest() {
+        Assertions.assertThatThrownBy(() -> underTest.findBy("123"))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Product not found.");
+        verify(repo, never()).save(any());
     }
 }
