@@ -1,6 +1,7 @@
 package br.com.iza.domain;
 
 import br.com.iza.controller.dto.ProductOutputDTO;
+import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,6 +27,9 @@ public class Product extends BaseDomain {
     @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false, scale = 2)
+    private BigDecimal valor;
+
     public Product(String name) {
         this.name = name;
     }
@@ -34,6 +38,7 @@ public class Product extends BaseDomain {
         return ProductOutputDTO.builder()
                 .identifier(getIdentifier())
                 .name(getName())
+                .valor(getValor())
                 .created_at(getCreated_at())
             .build();
     }

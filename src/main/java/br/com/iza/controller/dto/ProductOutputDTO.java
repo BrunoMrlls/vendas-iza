@@ -1,5 +1,6 @@
 package br.com.iza.controller.dto;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +17,7 @@ public class ProductOutputDTO {
 
     private String identifier;
     private String name;
+    private BigDecimal valor;
     private LocalDateTime created_at;
 
 }

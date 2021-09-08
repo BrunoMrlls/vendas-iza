@@ -8,6 +8,7 @@ import br.com.iza.domain.Product;
 import br.com.iza.service.ProductService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import java.math.BigDecimal;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,7 +39,7 @@ class ProductControllerTest {
 
         when(productService.insert(any())).thenReturn(insert);
 
-        ProductInputDTO content = new ProductInputDTO("Playstation 5");
+        ProductInputDTO content = new ProductInputDTO("Playstation 5", BigDecimal.TEN);
 
         this.mockMvc
             .perform(
