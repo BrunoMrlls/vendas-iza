@@ -8,6 +8,10 @@ import br.com.iza.domain.Product;
 import br.com.iza.service.ProductService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import java.math.BigDecimal;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,17 +32,17 @@ class ProductControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    private ObjectMapper objectMapper = new ObjectMapper();
-    private ObjectWriter prettyWriter = objectMapper.writerWithDefaultPrettyPrinter();
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectWriter prettyWriter = objectMapper.writerWithDefaultPrettyPrinter();
 
     @Test @DisplayName("Deve inserir um produto")
     void insert() throws Exception {
 
-        Product insert = new Product("Playstation 5");
+        Product insert = new Product("Playstation 5", BigDecimal.TEN);
 
         when(productService.insert(any())).thenReturn(insert);
 
-        ProductInputDTO content = new ProductInputDTO("Playstation 5");
+        ProductInputDTO content = new ProductInputDTO("Playstation 5", BigDecimal.TEN);
 
         this.mockMvc
             .perform(
@@ -57,17 +61,23 @@ class ProductControllerTest {
 
         Product expected = Product
             .builder()
-                .identifier(uuid)
                 .name("Playstation 5")
+                .valor(BigDecimal.TEN)
             .build();
 
         when(productService.findBy(any())).thenReturn(expected);
 
+
+        ObjectMapper mapper = JsonMapper.builder()
+            .build().registerModule(new JavaTimeModule())
+            .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+
+        var dtoJson = mapper.writeValueAsString(expected.toOutputDTO());
         mockMvc
             .perform(
                 MockMvcRequestBuilders.get("/api/product/{identifier}", uuid)
             ).andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(MockMvcResultMatchers.content().json(prettyWriter.writeValueAsString(expected.toOutputDTO())));
+            .andExpect(MockMvcResultMatchers.content().json(dtoJson));
 
     }
 }

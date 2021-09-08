@@ -1,7 +1,10 @@
 package br.com.iza.controller.dto;
 
+import java.math.BigDecimal;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,9 +13,13 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ProductInputDTO {
 
-    @NotBlank(message = "Field name must be not empty.")
+    @NotBlank(message = "Field name must not be empty.")
     private String name;
+
+    @DecimalMin(value = "0")
+    private BigDecimal valor;
 
 }

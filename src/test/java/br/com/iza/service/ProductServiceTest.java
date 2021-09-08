@@ -6,8 +6,10 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import br.com.iza.controller.dto.ProductInputDTO;
 import br.com.iza.domain.Product;
 import br.com.iza.repository.ProductRepository;
+import java.math.BigDecimal;
 import java.util.UUID;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,9 +38,10 @@ public class ProductServiceTest {
     void productInsertTest() {
         //given
         String productName = "TV 29'";
+        var input = ProductInputDTO.builder().name(productName).valor(BigDecimal.TEN).build();
 
         //when
-        underTest.insert(productName);
+        underTest.insert(input);
 
         //then
         ArgumentCaptor<Product> productArgumentCaptor = ArgumentCaptor.forClass(Product.class);
@@ -55,7 +58,7 @@ public class ProductServiceTest {
         String identifier = UUID.randomUUID().toString();
         String productName = "Macbook air";
 
-        Product expeted = new Product(productName);
+        Product expeted = new Product(productName, BigDecimal.TEN);
         //when
         when(repo.findProductByIdentifier(identifier)).thenReturn(expeted);
 
@@ -67,7 +70,7 @@ public class ProductServiceTest {
 
     @Test @DisplayName("Deve testar erro de campo obrigatório")
     void itShouldThrowProductInsertIllegalArgumentErrorTest() {
-        Assertions.assertThatThrownBy(() -> underTest.insert(null))
+        Assertions.assertThatThrownBy(() -> underTest.insert(ProductInputDTO.builder().valor(BigDecimal.TEN).build()))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("Property name is required.");
 

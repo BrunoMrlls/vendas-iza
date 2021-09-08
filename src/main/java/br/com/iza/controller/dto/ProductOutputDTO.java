@@ -1,5 +1,8 @@
 package br.com.iza.controller.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +19,9 @@ public class ProductOutputDTO {
 
     private String identifier;
     private String name;
-    private LocalDateTime created_at;
+    private BigDecimal valor;
+
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    private LocalDateTime createdAt;
 
 }

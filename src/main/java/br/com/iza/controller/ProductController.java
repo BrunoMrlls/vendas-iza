@@ -24,7 +24,7 @@ public class ProductController {
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Void> insert(@RequestBody @Valid ProductInputDTO productDTO) {
-        Product product = productService.insert(productDTO.getName());
+        Product product = productService.insert(productDTO);
         URI location = ServletUriComponentsBuilder
             .fromCurrentRequest()
             .path("/{identifier}")

@@ -1,5 +1,6 @@
 package br.com.iza.service;
 
+import br.com.iza.controller.dto.ProductInputDTO;
 import br.com.iza.domain.Product;
 import br.com.iza.repository.ProductRepository;
 import java.util.Optional;
@@ -15,11 +16,17 @@ public class ProductService {
     @Resource
     private ProductRepository productRepository;
 
-    public Product insert(String name) {
-        if (StringUtils.isEmpty(name)) {
+    public Product insert(ProductInputDTO dto) {
+        if (StringUtils.isEmpty(dto.getName())) {
             throw new IllegalArgumentException("Property name is required.");
         }
-        return productRepository.save(new Product(name));
+
+        var product = Product.builder()
+                                .name(dto.getName())
+                                .valor(dto.getValor())
+                               .build();
+
+        return productRepository.save(product);
     }
 
     public Product findBy(String identifier) {
