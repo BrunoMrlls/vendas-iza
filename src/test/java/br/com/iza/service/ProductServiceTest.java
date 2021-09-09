@@ -1,12 +1,12 @@
 package br.com.iza.service;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import br.com.iza.controller.dto.ProductInputDTO;
+import br.com.iza.controller.dto.product.ProductInputDTO;
 import br.com.iza.domain.Product;
 import br.com.iza.repository.ProductRepository;
 import java.math.BigDecimal;
@@ -19,10 +19,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(MockitoExtension.class)
-@ExtendWith(SpringExtension.class)
 public class ProductServiceTest {
 
     @Mock
@@ -80,7 +78,7 @@ public class ProductServiceTest {
     @Test @DisplayName("Deve testar erro de produto não encontrado")
     void itShouldThrowProductNotFoundExceptionTest() {
         Assertions.assertThatThrownBy(() -> underTest.findBy("123"))
-            .isInstanceOf(IllegalArgumentException.class)
+            .isInstanceOf(ResourceNotFoundException.class)
             .hasMessageContaining("Product not found.");
         verify(repo, never()).save(any());
     }

@@ -1,6 +1,6 @@
 package br.com.iza.service;
 
-import br.com.iza.controller.dto.ProductInputDTO;
+import br.com.iza.controller.dto.product.ProductInputDTO;
 import br.com.iza.domain.Product;
 import br.com.iza.repository.ProductRepository;
 import java.util.Optional;
@@ -32,7 +32,7 @@ public class ProductService {
     public Product findBy(String identifier) {
         Product product = productRepository.findProductByIdentifier(identifier);
         if (Optional.ofNullable(product).isEmpty()) {
-            throw new IllegalArgumentException("Product not found.");
+            throw new ResourceNotFoundException("Product not found.");
         }
         return product;
     }

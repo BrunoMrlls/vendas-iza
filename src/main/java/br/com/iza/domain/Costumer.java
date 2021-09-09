@@ -1,7 +1,6 @@
 package br.com.iza.domain;
 
-import br.com.iza.controller.dto.product.ProductOutputDTO;
-import java.math.BigDecimal;
+import br.com.iza.controller.dto.costumer.CostumerOutputDTO;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,11 +11,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity
-public class Product extends BaseDomain {
+public class Costumer extends BaseDomain{
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
@@ -26,22 +25,22 @@ public class Product extends BaseDomain {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false, scale = 2)
-    private BigDecimal valor;
+    @Column
+    private String phoneNumber;
 
     @Builder
-    public Product(String name, BigDecimal valor) {
+    public Costumer(String name, String phoneNumber) {
         super();
         this.name = name;
-        this.valor = valor;
+        this.phoneNumber = phoneNumber;
     }
 
-    public ProductOutputDTO toOutputDTO() {
-        return ProductOutputDTO.builder()
-                .identifier(getIdentifier())
-                .name(getName())
-                .valor(getValor())
-                .createdAt(getCreatedAt())
-            .build();
+    public CostumerOutputDTO toOutputDTO() {
+        return CostumerOutputDTO.builder()
+            .createdAt(getCreatedAt())
+            .identifier(getIdentifier())
+            .name(getName())
+            .phoneNumber(getPhoneNumber())
+        .build();
     }
 }

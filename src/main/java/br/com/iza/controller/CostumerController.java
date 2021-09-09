@@ -1,9 +1,8 @@
 package br.com.iza.controller;
 
-import br.com.iza.controller.dto.product.ProductInputDTO;
-import br.com.iza.controller.dto.product.ProductOutputDTO;
-import br.com.iza.domain.Product;
-import br.com.iza.service.ProductService;
+import br.com.iza.controller.dto.costumer.CostumerInputDTO;
+import br.com.iza.controller.dto.costumer.CostumerOutputDTO;
+import br.com.iza.service.CostumerService;
 import java.net.URI;
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -16,27 +15,25 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
-@RequestMapping(value = "/api/product")
-public class ProductController {
+@RequestMapping(value = "/api/costumer")
+public class CostumerController {
 
     @Resource
-    private ProductService productService;
+    private CostumerService service;
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Void> insert(@RequestBody @Valid ProductInputDTO productDTO) {
-        Product product = productService.insert(productDTO);
+    public ResponseEntity<Void> insert(@RequestBody @Valid CostumerInputDTO input) {
+        var costumer = service.insert(input);
         URI location = ServletUriComponentsBuilder
             .fromCurrentRequest()
             .path("/{identifier}")
-            .buildAndExpand(product.getIdentifier())
-        .toUri();
+            .buildAndExpand(costumer.getIdentifier())
+            .toUri();
         return ResponseEntity.created(location).build();
     }
 
     @RequestMapping(value = "/{identifier}")
-    public ResponseEntity<ProductOutputDTO> findIdentity(@PathVariable(name = "identifier") String identifier) {
-        ProductOutputDTO output = productService.findBy(identifier).toOutputDTO();
-        return ResponseEntity.ok(output);
+    public ResponseEntity<CostumerOutputDTO> findBy(@PathVariable(name = "identifier") String identifier) {
+        return ResponseEntity.ok(service.findBy(identifier).toOutputDTO());
     }
-
 }

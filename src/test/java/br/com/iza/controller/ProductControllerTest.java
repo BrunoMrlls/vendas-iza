@@ -3,7 +3,7 @@ package br.com.iza.controller;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import br.com.iza.controller.dto.ProductInputDTO;
+import br.com.iza.controller.dto.product.ProductInputDTO;
 import br.com.iza.domain.Product;
 import br.com.iza.service.ProductService;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -1,4 +1,4 @@
-package br.com.iza.controller.dto;
+package br.com.iza.controller.dto.product;
 
 import java.math.BigDecimal;
 import javax.validation.constraints.DecimalMin;
