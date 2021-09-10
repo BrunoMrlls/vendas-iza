@@ -11,10 +11,10 @@ import lombok.Getter;
 @MappedSuperclass
 public abstract class BaseDomain {
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true, updatable = false)
     private String identifier;
 
     public BaseDomain() {
