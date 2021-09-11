@@ -3,7 +3,6 @@ package br.com.iza.service;
 import br.com.iza.controller.dto.product.ProductInputDTO;
 import br.com.iza.domain.Product;
 import br.com.iza.repository.ProductRepository;
-import java.util.Optional;
 import javax.annotation.Resource;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -15,6 +14,9 @@ public class ProductService {
 
     @Resource
     private ProductRepository productRepository;
+
+    @Resource
+    private ProductFinder finder;
 
     public Product insert(ProductInputDTO dto) {
         if (StringUtils.isEmpty(dto.getName())) {
@@ -30,11 +32,7 @@ public class ProductService {
     }
 
     public Product findBy(String identifier) {
-        Product product = productRepository.findProductByIdentifier(identifier);
-        if (Optional.ofNullable(product).isEmpty()) {
-            throw new ResourceNotFoundException("Product not found.");
-        }
-        return product;
+        return finder.findByIdentifier(identifier);
     }
 
 }

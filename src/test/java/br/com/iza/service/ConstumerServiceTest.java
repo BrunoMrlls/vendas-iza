@@ -12,11 +12,11 @@ import br.com.iza.domain.Costumer;
 import br.com.iza.repository.CostumerRepository;
 import java.util.UUID;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -26,14 +26,13 @@ public class ConstumerServiceTest {
     @Mock
     private CostumerRepository repo;
 
+    @Mock
+    private CostumerFinder finder;
+
+    @InjectMocks
     private CostumerService underTest;
 
     private ArgumentCaptor<Costumer> captor = ArgumentCaptor.forClass(Costumer.class);
-
-    @BeforeEach()
-    public void setUp() {
-        this.underTest = new CostumerService(repo);
-    }
 
     @Test @DisplayName("Deve gravar um novo cliente")
     public void itShouldInsertNewCostumerTest() {
@@ -67,7 +66,7 @@ public class ConstumerServiceTest {
         //arrange
         final String uui = UUID.randomUUID().toString();
         Costumer expected = Costumer.builder().name("José").build();
-        when(repo.findByIdentifier(any())).thenReturn(expected);
+        when(finder.findByIdentifier(any())).thenReturn(expected);
 
         //act
         Costumer returned = underTest.findBy(uui);

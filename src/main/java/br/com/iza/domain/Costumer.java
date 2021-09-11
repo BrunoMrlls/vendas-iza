@@ -17,9 +17,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Costumer extends BaseDomain{
 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
-    @Id
     private Long id;
 
     @Column(nullable = false, unique = true)

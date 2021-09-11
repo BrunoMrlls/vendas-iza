@@ -5,7 +5,6 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 import br.com.iza.controller.dto.costumer.CostumerInputDTO;
 import br.com.iza.domain.Costumer;
 import br.com.iza.repository.CostumerRepository;
-import java.util.Optional;
 import javax.annotation.Resource;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +15,9 @@ public class CostumerService {
 
     @Resource
     private CostumerRepository costumerRepository;
+
+    @Resource
+    private CostumerFinder finder;
 
     public Costumer insert(CostumerInputDTO inputDTO) {
         if (isEmpty(inputDTO.getName())) {
@@ -30,10 +32,6 @@ public class CostumerService {
     }
 
     public Costumer findBy(String identifier) {
-        var costumer = costumerRepository.findByIdentifier(identifier);
-        if (Optional.ofNullable(costumer).isEmpty()) {
-            throw new ResourceNotFoundException("Costumer not found.");
-        }
-        return costumer;
+        return finder.findByIdentifier(identifier);
     }
 }

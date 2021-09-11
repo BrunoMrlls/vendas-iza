@@ -2,6 +2,7 @@ package br.com.iza.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -12,11 +13,11 @@ import br.com.iza.repository.ProductRepository;
 import java.math.BigDecimal;
 import java.util.UUID;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -25,12 +26,13 @@ public class ProductServiceTest {
 
     @Mock
     private ProductRepository repo;
+
+    @Mock
+    private ProductFinder finder;
+
+    @InjectMocks
     private ProductService underTest;
 
-    @BeforeEach
-    void setUp() {
-        underTest = new ProductService(repo);
-    }
 
     @Test @DisplayName("Deve testar inserção de produto")
     void productInsertTest() {
@@ -58,11 +60,10 @@ public class ProductServiceTest {
 
         Product expeted = new Product(productName, BigDecimal.TEN);
         //when
-        when(repo.findProductByIdentifier(identifier)).thenReturn(expeted);
+        when(finder.findByIdentifier(eq(identifier))).thenReturn(expeted);
 
         //then
         Product returned = underTest.findBy(identifier);
-
         assertEquals(expeted, returned);
     }
 
@@ -75,11 +76,4 @@ public class ProductServiceTest {
         verify(repo, never()).save(any());
     }
 
-    @Test @DisplayName("Deve testar erro de produto não encontrado")
-    void itShouldThrowProductNotFoundExceptionTest() {
-        Assertions.assertThatThrownBy(() -> underTest.findBy("123"))
-            .isInstanceOf(ResourceNotFoundException.class)
-            .hasMessageContaining("Product not found.");
-        verify(repo, never()).save(any());
-    }
 }

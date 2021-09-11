@@ -10,8 +10,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,13 +30,14 @@ public class Sale extends BaseDomain {
     private Long id;
 
     @Column(nullable = false)
-    private Integer order;
+    private Integer number;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private SaleStatus status;
+    private SaleStatus status = SaleStatus.OPENED;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "costumer_id")
     private Costumer costumer;
 
     @Enumerated(EnumType.STRING)
@@ -45,16 +47,17 @@ public class Sale extends BaseDomain {
     private BigDecimal total;
 
     @Column(nullable = false)
-    private LocalDateTime updatedAt;
+    private LocalDateTime updatedAt = LocalDateTime.now();
 
     @OneToMany(mappedBy = "sale", orphanRemoval = true)
     private List<SaleItem> items;
 
     @Builder
-    public Sale(Integer order, SaleStatus status, PaymentForm paymentForm, BigDecimal total, LocalDateTime updatedAt, List<SaleItem> items) {
-        super();
-        this.order = order;
+    public Sale(Integer number, SaleStatus status, Costumer costumer, PaymentForm paymentForm, BigDecimal total, LocalDateTime updatedAt,
+        List<SaleItem> items) {
+        this.number = number;
         this.status = status;
+        this.costumer = costumer;
         this.paymentForm = paymentForm;
         this.total = total;
         this.updatedAt = updatedAt;
