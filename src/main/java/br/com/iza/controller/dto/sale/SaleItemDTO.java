@@ -28,4 +28,8 @@ public class SaleItemDTO {
     @NotNull
     private BigDecimal unitValue;
 
+    private BigDecimal getTotal() {
+        return unitValue.multiply(BigDecimal.valueOf(quantity));
+    }
+
 }

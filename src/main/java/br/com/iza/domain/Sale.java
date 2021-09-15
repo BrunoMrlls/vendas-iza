@@ -1,22 +1,16 @@
 package br.com.iza.domain;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import br.com.iza.controller.dto.sale.SaleOutputDTO;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -62,5 +56,17 @@ public class Sale extends BaseDomain {
         this.total = total;
         this.updatedAt = updatedAt;
         this.items = items;
+    }
+
+    public SaleOutputDTO toOutputDTO() {
+        return SaleOutputDTO.builder()
+                .costumerIdentifier(getCostumer().getIdentifier())
+                .number(getNumber())
+                .paymentForm(getPaymentForm())
+                .status(getStatus())
+                .total(getTotal())
+                .updatedAt(getUpdatedAt())
+                .items(getItems().stream().map(SaleItem::toOutputDTO).collect(Collectors.toList()))
+        .build();
     }
 }

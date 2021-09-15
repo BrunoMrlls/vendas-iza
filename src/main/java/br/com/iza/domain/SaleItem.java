@@ -1,20 +1,10 @@
 package br.com.iza.domain;
 
+import br.com.iza.controller.dto.sale.SaleItemDTO;
+import lombok.*;
+
+import javax.persistence.*;
 import java.math.BigDecimal;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Transient;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Getter
@@ -46,4 +36,11 @@ public class SaleItem {
         return unitValue.multiply(BigDecimal.valueOf(quantity));
     }
 
+    public SaleItemDTO toOutputDTO() {
+        return SaleItemDTO.builder()
+                .productIdentifier(getProduct().getIdentifier())
+                .quantity(getQuantity())
+                .unitValue(getUnitValue())
+            .build();
+    }
 }
