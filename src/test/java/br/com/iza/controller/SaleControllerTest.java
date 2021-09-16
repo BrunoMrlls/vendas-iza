@@ -32,7 +32,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpHeaders.LOCATION;
 
-@Disabled
 @ExtendWith(MockitoExtension.class)
 @WebMvcTest(controllers = {SaleController.class})
 public class SaleControllerTest {
