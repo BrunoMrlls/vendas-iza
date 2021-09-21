@@ -83,7 +83,7 @@ public class SaleServiceTest {
     }
 
     private void arrangeExpectedProduct(String productIdentifier) {
-        var product = Product.builder().valor(BigDecimal.TEN).name("Sabão").build();
+        var product = Product.builder().value(BigDecimal.TEN).name("Sabão").build();
         product.setIdentifier(productIdentifier);
         when(productFinder.findByIdentifier(eq(productIdentifier))).thenReturn(product);
     }

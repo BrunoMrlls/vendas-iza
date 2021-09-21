@@ -25,7 +25,6 @@ public class SaleItemDTO {
     private Integer quantity;
 
     @DecimalMin(value = "0.01")
-    @NotNull
     private BigDecimal unitValue;
 
     private BigDecimal getTotal() {

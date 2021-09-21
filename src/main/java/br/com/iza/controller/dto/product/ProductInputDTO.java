@@ -20,6 +20,6 @@ public class ProductInputDTO {
     private String name;
 
     @DecimalMin(value = "0")
-    private BigDecimal valor;
+    private BigDecimal value;
 
 }

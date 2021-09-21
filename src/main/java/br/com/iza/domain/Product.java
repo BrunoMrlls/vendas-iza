@@ -27,20 +27,20 @@ public class Product extends BaseDomain {
     private String name;
 
     @Column(nullable = false, scale = 2)
-    private BigDecimal valor;
+    private BigDecimal value;
 
     @Builder
-    public Product(String name, BigDecimal valor) {
+    public Product(String name, BigDecimal value) {
         super();
         this.name = name;
-        this.valor = valor;
+        this.value = value;
     }
 
     public ProductOutputDTO toOutputDTO() {
         return ProductOutputDTO.builder()
                 .identifier(getIdentifier())
                 .name(getName())
-                .valor(getValor())
+                .valor(getValue())
                 .createdAt(getCreatedAt())
             .build();
     }

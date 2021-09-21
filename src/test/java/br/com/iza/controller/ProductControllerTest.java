@@ -62,7 +62,7 @@ class ProductControllerTest {
         Product expected = Product
             .builder()
                 .name("Playstation 5")
-                .valor(BigDecimal.TEN)
+                .value(BigDecimal.TEN)
             .build();
 
         when(productService.findBy(any())).thenReturn(expected);

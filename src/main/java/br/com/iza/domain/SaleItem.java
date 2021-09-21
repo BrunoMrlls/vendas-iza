@@ -28,7 +28,8 @@ public class SaleItem {
     @Column(nullable = false, scale = 2)
     private BigDecimal unitValue;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
+    @JoinColumn(name = "sale_id")
     private Sale sale;
 
     @Transient

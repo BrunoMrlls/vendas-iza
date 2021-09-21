@@ -25,7 +25,7 @@ public class ProductService {
 
         var product = Product.builder()
                                 .name(dto.getName())
-                                .valor(dto.getValor())
+                                .value(dto.getValue())
                                .build();
 
         return productRepository.save(product);

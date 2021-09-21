@@ -1,6 +1,7 @@
 package br.com.iza.service;
 
 import br.com.iza.controller.dto.sale.SaleInputDTO;
+import br.com.iza.domain.Product;
 import br.com.iza.domain.Sale;
 import br.com.iza.domain.SaleItem;
 import br.com.iza.repository.SaleRepository;
@@ -30,31 +31,38 @@ public class SaleService {
 
         List<SaleItem> itemsSale = input.getItems().stream()
             .map(
-                item -> SaleItem.builder()
-                        .product(productFinder.findByIdentifier(item.getProductIdentifier()))
-                        .quantity(item.getQuantity())
-                        .unitValue(item.getUnitValue())
-                    .build()
+                item -> {
+                    Product product = productFinder.findByIdentifier(item.getProductIdentifier());
+                    return SaleItem.builder()
+                            .product(product)
+                            .unitValue(item.getUnitValue() != null ? item.getUnitValue() : product.getValue())
+                            .quantity(item.getQuantity())
+                        .build();
+                    }
                 )
             .collect(Collectors.toList());
 
         var sale = Sale.builder()
                 .costumer(costumerFinder.findByIdentifier(input.getCostumerIdentifier()))
                 .number(saleRepository.countSaleByCreatedAt(LocalDate.now()))
-                .items(itemsSale)
                 .paymentForm(input.getPaymentForm())
                 .status(input.getStatus())
                 .total(itemsSale.stream()
                     .map(
                         saleItem ->
-                            BigDecimal.valueOf(saleItem.getQuantity()).multiply(saleItem.getUnitValue()))
-                            .reduce(BigDecimal.ZERO, BigDecimal::add))
+                            BigDecimal.valueOf(saleItem.getQuantity()).multiply(saleItem.getUnitValue())
+                    ).reduce(BigDecimal.ZERO, BigDecimal::add))
             .build();
+        sale.addItems(itemsSale);
 
         return saleRepository.save(sale);
     }
 
     public Sale findBy(String identifier) {
-        return saleRepository.findByIdentifier(identifier);
+        var sale = saleRepository.findByIdentifier(identifier);
+        if (sale == null) {
+            throw new ResourceNotFoundException("Sale not found.");
+        }
+        return sale;
     }
 }

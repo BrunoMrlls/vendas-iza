@@ -20,7 +20,7 @@ public class Sale extends BaseDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true, nullable = false)
+    @Column(name = "sale_id", unique = true, nullable = false)
     private Long id;
 
     @Column(nullable = false)
@@ -43,12 +43,12 @@ public class Sale extends BaseDomain {
     @Column(nullable = false)
     private LocalDateTime updatedAt = LocalDateTime.now();
 
-    @OneToMany(mappedBy = "sale", orphanRemoval = true)
+    @OneToMany(mappedBy = "sale", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<SaleItem> items;
 
     @Builder
-    public Sale(Integer number, SaleStatus status, Costumer costumer, PaymentForm paymentForm, BigDecimal total, LocalDateTime updatedAt,
-        List<SaleItem> items) {
+    public Sale(Integer number, SaleStatus status, Costumer costumer, PaymentForm paymentForm, BigDecimal total, LocalDateTime updatedAt, List<SaleItem> items) {
+        super();
         this.number = number;
         this.status = status;
         this.costumer = costumer;
@@ -56,6 +56,7 @@ public class Sale extends BaseDomain {
         this.total = total;
         this.updatedAt = updatedAt;
         this.items = items;
+        this.updatedAt = LocalDateTime.now();
     }
 
     public SaleOutputDTO toOutputDTO() {
@@ -68,5 +69,10 @@ public class Sale extends BaseDomain {
                 .updatedAt(getUpdatedAt())
                 .items(getItems().stream().map(SaleItem::toOutputDTO).collect(Collectors.toList()))
         .build();
+    }
+
+    public void addItems(List<SaleItem> itemsSale) {
+        itemsSale.forEach(itemSale -> itemSale.setSale(this));
+        setItems(itemsSale);
     }
 }

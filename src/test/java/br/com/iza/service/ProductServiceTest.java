@@ -38,7 +38,7 @@ public class ProductServiceTest {
     void productInsertTest() {
         //given
         String productName = "TV 29'";
-        var input = ProductInputDTO.builder().name(productName).valor(BigDecimal.TEN).build();
+        var input = ProductInputDTO.builder().name(productName).value(BigDecimal.TEN).build();
 
         //when
         underTest.insert(input);
@@ -69,7 +69,7 @@ public class ProductServiceTest {
 
     @Test @DisplayName("Deve testar erro de campo obrigatório")
     void itShouldThrowProductInsertIllegalArgumentErrorTest() {
-        Assertions.assertThatThrownBy(() -> underTest.insert(ProductInputDTO.builder().valor(BigDecimal.TEN).build()))
+        Assertions.assertThatThrownBy(() -> underTest.insert(ProductInputDTO.builder().value(BigDecimal.TEN).build()))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("Property name is required.");
 
